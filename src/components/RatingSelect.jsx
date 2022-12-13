@@ -1,8 +1,14 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import FeedbackContext from "../context/FeedbackContext";
 const RatingSelect = ({ select }) => {
     const [selected, setSelected] = useState(10);
 
+    const { newFeedback } = useContext(FeedbackContext);
+
+    useEffect(() => {
+        setSelected(newFeedback.item.rating);
+    }, [newFeedback]);
     const handleChange = ({ target: { value } }) => {
         setSelected(+value); //auto turn the value into numbers
 

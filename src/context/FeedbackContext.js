@@ -11,20 +11,37 @@ export const FeedbackProvider = ({ children }) => {
         },
         {
             id: 2,
-            text: "This item is feedback item 1",
+            text: "This item is feedback item 2",
             rating: 8,
         },
         {
             id: 3,
-            text: "This item is feedback item 1",
+            text: "This item is feedback item 3",
             rating: 5,
         },
     ]);
+
+    const [newFeedback, setNewFeedback] = useState({ item: {}, edit: false });
 
     //handle add
     const handleAdd = (newFeedback) => {
         newFeedback.id = uuidv4();
         setFeedback([newFeedback, ...feedback]); //add new feedback on top of current feedback array (state) using spread operator
+    };
+
+    //handle edit
+    const handleEdit = (item) => {
+        setNewFeedback({ item, edit: true });
+        // console.log(item);
+    };
+
+    //update feedback item
+    const updateFeedback = (id, updatedItem) => {
+        setFeedback(
+            feedback.map((item) =>
+                item.id === id ? { ...item, ...updatedItem } : item
+            )
+        );
     };
 
     //handle delete context
@@ -35,7 +52,16 @@ export const FeedbackProvider = ({ children }) => {
     };
 
     return (
-        <FeedbackContext.Provider value={{ feedback, handleDelete, handleAdd }}>
+        <FeedbackContext.Provider
+            value={{
+                feedback,
+                handleDelete,
+                handleAdd,
+                handleEdit,
+                newFeedback,
+                updateFeedback,
+            }}
+        >
             {children}
         </FeedbackContext.Provider>
     );

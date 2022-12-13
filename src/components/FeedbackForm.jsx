@@ -5,7 +5,7 @@ import RatingSelect from "./RatingSelect";
 import { useContext } from "react";
 import FeedbackContext from "../context/FeedbackContext";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 const FeedbackForm = () => {
     const [text, setText] = useState("");
     const [btnDisabled, setBtnDisabled] = useState(true);
@@ -13,7 +13,20 @@ const FeedbackForm = () => {
     const [rating, setRating] = useState(10);
 
     //context api
-    const { handleAdd } = useContext(FeedbackContext);
+    const { handleAdd, newFeedback, updateFeedback } =
+        useContext(FeedbackContext);
+
+    //only runs after rendering the DOM, or when newFeedback value has changed
+    useEffect(() => {
+        if (newFeedback.edit === true) {
+            setBtnDisabled(false);
+            setText(newFeedback.item.text);
+            setRating(newFeedback.item.rating);
+
+            //manual click
+            // document.getElementById(`num${newFeedback.item.rating}`).click();
+        }
+    }, [newFeedback]);
 
     const handleTextChange = (e) => {
         let inputText = e.target.value;
@@ -34,13 +47,18 @@ const FeedbackForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (text.trim().length > 10) {
-            const newFeedback = {
+            const thisFeedback = {
                 text, //or text: text
                 rating: rating,
             };
 
-            //add to app.js(lifting the state up)
-            handleAdd(newFeedback);
+            if (newFeedback.edit) {
+                updateFeedback(newFeedback.item.id, thisFeedback);
+            } else {
+                //if edit === false then add
+                //add to app.js(lifting the state up)
+                handleAdd(newFeedback);
+            }
 
             setText("");
             setBtnDisabled(true);

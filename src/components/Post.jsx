@@ -15,8 +15,6 @@ const Post = () => {
 
     const navigate = useNavigate();
     const onClick = () => {
-        console.log("Hello");
-
         //redirect after doing something
         navigate("/about");
     };
