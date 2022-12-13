@@ -1,33 +1,31 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 const FeedbackContext = createContext();
 
 export const FeedbackProvider = ({ children }) => {
-    const [feedback, setFeedback] = useState([
-        {
-            id: 1,
-            text: "This item is feedback item 1",
-            rating: 10,
-        },
-        {
-            id: 2,
-            text: "This item is feedback item 2",
-            rating: 8,
-        },
-        {
-            id: 3,
-            text: "This item is feedback item 3",
-            rating: 5,
-        },
-    ]);
-
+    const [isLoading, setIsLoading] = useState(true);
+    const [feedback, setFeedback] = useState([]);
     const [newFeedback, setNewFeedback] = useState({ item: {}, edit: false });
 
+    //useEffect
+    useEffect(() => {
+        fetchFeedback();
+    }, []);
     //handle add
     const handleAdd = (newFeedback) => {
-        console.log(newFeedback);
         newFeedback.id = uuidv4();
         setFeedback([newFeedback, ...feedback]); //add new feedback on top of current feedback array (state) using spread operator
+    };
+
+    //Fetch feedback
+    const fetchFeedback = async () => {
+        const response = await fetch(
+            "http://localhost:5000/feedback?_sort=id&_order=asc"
+        );
+        const data = await response.json();
+
+        setFeedback(data);
+        setIsLoading(false);
     };
 
     //handle edit
@@ -61,6 +59,7 @@ export const FeedbackProvider = ({ children }) => {
                 handleEdit,
                 newFeedback,
                 updateFeedback,
+                isLoading,
             }}
         >
             {children}
