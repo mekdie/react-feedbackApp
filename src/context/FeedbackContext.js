@@ -37,7 +37,6 @@ export const FeedbackProvider = ({ children }) => {
     //handle edit
     const handleEdit = (item) => {
         setNewFeedback({ item, edit: true });
-        // console.log(item);
     };
 
     //update feedback item
