@@ -25,6 +25,7 @@ export const FeedbackProvider = ({ children }) => {
 
     //handle add
     const handleAdd = (newFeedback) => {
+        console.log(newFeedback);
         newFeedback.id = uuidv4();
         setFeedback([newFeedback, ...feedback]); //add new feedback on top of current feedback array (state) using spread operator
     };

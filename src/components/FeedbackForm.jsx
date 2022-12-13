@@ -57,7 +57,7 @@ const FeedbackForm = () => {
             } else {
                 //if edit === false then add
                 //add to app.js(lifting the state up)
-                handleAdd(newFeedback);
+                handleAdd(thisFeedback);
             }
 
             setText("");
